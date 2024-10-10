@@ -15,7 +15,7 @@ h1 {
 }
 
 h2 {
-    color: #2c3e99
+    color: #259b81
 }
 
 .site-header {
@@ -67,4 +67,20 @@ h2 {
     background-color: #333;
     color: white;
     padding: 50px;
+}
+
+.right a {
+    color: #34bfb7;
+    text-decoration: none;
+    border-bottom: 1px solid #34bfb7;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.right a:hover {
+    color: #259b81;
+    border-bottom-color: #259b81;
+}
+
+.right a:visited {
+    color: #a160ae;
 }
