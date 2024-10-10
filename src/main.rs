@@ -6,8 +6,24 @@ use pulldown_cmark::{Parser, Options, html};
 use std::fs;
 
 
+#[get("/")]
+fn index() -> Template {
+    let files = fs::read_dir("content")
+        .unwrap()
+        .filter_map(|entry| {
+            entry.ok().and_then(|e|
+                e.path().file_stem()
+                    .and_then(|n| n.to_str().map(String::from))   
+            )
+        })
+        .collect::<Vec<String>>();
+
+    Template::render("base", context! { files: files, content: get_markdown("TheArchive") })
+}
+
+
 #[get("/<file>")]
-fn render_markdown(file: &str) -> Template {
+fn get_markdown(file: &str) -> String {
     let path = format!("content/{}.md", file);
     let markdown = fs::read_to_string(path).unwrap_or_else(|_| "# 404\n\nFile not found.".to_string());
 
@@ -19,13 +35,13 @@ fn render_markdown(file: &str) -> Template {
     let mut html_output = String::new();
     html::push_html(&mut html_output, parser);
 
-    Template::render("base", context! {content: html_output})
+    html_output
 }
 
 #[launch]
-fn rocket() -> _ {  
+fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![render_markdown])
+        .mount("/", routes![index, get_markdown])
         .mount("/static", FileServer::from(relative!("static")))
         .attach(Template::fairing())
 }
