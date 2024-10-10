@@ -2,4 +2,4 @@
 
 "The Archive" is a simple website to render Markdown files.
 
-_[Source Code](github.com/Mazedias/The-Archive)_
+_[Source Code](https://www.github.com/Mazedias/The-Archive)_
