@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Archive</title>
+        <link href="/static/css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <header class="site-header">
+            <h1>The Archive</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="split left">
+                <h2>Content</h2>
+            </div>
+
+            <div class="split right">
+                {{content | safe}}
+            </div>
+        </div>
+    </body>
+</html>
