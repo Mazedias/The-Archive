@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  the-archive:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./content:/usr/local/bin/content
+    environment:
+      - ROCKET_ADDRESS=0.0.0.0
+      - GIT_REPO_URL=TODO
