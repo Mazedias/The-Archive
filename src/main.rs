@@ -5,6 +5,7 @@ use rocket_dyn_templates::{Template, context};
 use pulldown_cmark::{Parser, Options, html};
 use std::fs;
 
+mod file_manager;
 
 #[get("/")]
 fn index() -> Template {
@@ -37,6 +38,7 @@ fn get_markdown(file: &str) -> String {
 
     html_output
 }
+
 
 #[launch]
 fn rocket() -> _ {
