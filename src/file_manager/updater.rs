@@ -1,7 +1,7 @@
-use std::env;
+use std::{env, fmt::format};
 use std::path::Path;
 
-use git2::Repository;
+use git2::{FetchOptions, Repository};
 
 pub enum UpdateStatus {
     NoUpdateNecessary,
@@ -28,7 +28,7 @@ pub fn update_files() -> UpdateStatus {
     let repository_path = Path::new("content");
 
     // Check if the repostory already exists, if not clone it
-    let repostory = match Repository::open(repository_path) {
+    let repository = match Repository::open(repository_path) {
         Ok(repo) => repo,
         Err(_) => {
             match Repository::clone(&git_url, repository_path) {
@@ -44,7 +44,53 @@ pub fn update_files() -> UpdateStatus {
         }
     };
 
-    // TODO: Update files 
+    let mut fetch_options = FetchOptions::new();
 
-    UpdateStatus::SuccessfullUpdated
+    // Update files
+    match repository.find_remote("origin") {
+        // Remote repositroy found
+        Ok(mut remote) => {
+
+            // Preform fetch operation
+            match remote.fetch(&["main"], Some(&mut fetch_options), None) {
+                Ok(_) => {
+                    println!("Fetch completed successfully.");
+
+                    let fetch_head = repository.find_reference("FETCH_HEAD").unwrap();
+                    let fetch_commit = repository.reference_to_annotated_commit(&fetch_head).unwrap();
+                    let analysis = repository.merge_analysis(&[&fetch_commit]).unwrap();
+
+                    // Check if merge is neccessary
+                    if analysis.0.is_up_to_date() {
+                        println!("Repository is up to date.");
+                        return UpdateStatus::NoUpdateNecessary;
+                    } else if analysis.0.is_fast_forward() {
+                        let refname = format!("refs/heads/{}", "main");
+                        let mut reference = repository.find_reference(&refname).unwrap();
+                        reference.set_target(fetch_commit.id(), "Fast-forward").unwrap();
+                        repository.set_head(&refname).unwrap();
+                        repository.checkout_head(Some(git2::build::CheckoutBuilder::default().force())).unwrap();
+                        
+                        println!("Fast-forward merge completed.");
+                        return UpdateStatus::SuccessfullUpdated;
+                    } else {
+                        println!("No-Fast-Forward merge required. Not implemented yet!");
+                        return UpdateStatus::UpdateNotPossible;
+                    }
+                }
+
+                // Fetch failed
+                Err(e) => {
+                    println!("Failed to fetch! Error: {}", e);
+                    return UpdateStatus::UpdateNotPossible;
+                }
+            }
+        }
+
+        // No remote repository found
+        Err(e) => {
+            println!("Failed to find remote 'origin'! Error: {}", e);
+            return UpdateStatus::UpdateNotPossible
+        }
+    };
 }
