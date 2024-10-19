@@ -1,4 +1,4 @@
-use std::{env, fmt::format};
+use std::env;
 use std::path::Path;
 
 use git2::{FetchOptions, Repository};
@@ -25,7 +25,7 @@ pub fn update_files() -> UpdateStatus {
     };
 
 
-    let repository_path = Path::new("content");
+    let repository_path = Path::new("content/repo");
 
     // Check if the repostory already exists, if not clone it
     let repository = match Repository::open(repository_path) {
