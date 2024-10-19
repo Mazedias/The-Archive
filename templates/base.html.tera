@@ -14,16 +14,13 @@
         <div class="content-wrapper">
             <div class="split left">
                 <h2>Content</h2>
-                <ul id="content">
-                    {% for file in files %}
-                        <li><a href="#" data-file="{{ file }}">{{ file }}</a></li>
-                    {% endfor %}
-                </ul>
+                <div id="file-structure"></div>
             </div>
 
-            <div class="split right">
+            <div class="split right", id="content">
                 {{content | safe}}
             </div>
-        </div>  
+        </div>
+        <!-- TODO: Create Script to generate Table of content -->
     </body>
 </html>
