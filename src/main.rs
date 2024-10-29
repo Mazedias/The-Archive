@@ -1,6 +1,6 @@
 #[macro_use] extern crate rocket;
 
-use file_manager::{file_structure::generate_file_structure, updater::{update_files, UpdateStatus}};
+use file_manager::{file_structure::{generate_file_markdown, generate_file_structure}, updater::{update_files, UpdateStatus}};
 use rocket::{fs::{relative, FileServer}, State};
 use rocket::serde::json::Json;
 use rocket_dyn_templates::{Template, context};
@@ -101,7 +101,8 @@ fn rocket() -> _ {
     let update_state_clone = update_state.clone();
 
     let repo_is_set = match env::var("GIT_REPO_URL") {
-        Ok(_) => true,
+        Ok(value) if !value.is_empty() => true,
+        Ok(_) => false,
         Err(_) => false,
     };
 
