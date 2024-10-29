@@ -1,6 +1,6 @@
 #[macro_use] extern crate rocket;
 
-use file_manager::{file_structure::{generate_file_markdown, generate_file_structure}, updater::{update_files, UpdateStatus}};
+use file_manager::{file_structure::generate_file_structure, updater::{update_files, UpdateStatus}};
 use rocket::{fs::{relative, FileServer}, State};
 use rocket::serde::json::Json;
 use rocket_dyn_templates::{Template, context};
