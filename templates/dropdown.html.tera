@@ -1,0 +1,10 @@
+{% macro dropdown(title, content) %}
+<div class="dropdown-container">
+    <button class="dropdown-button">
+        {{ title }}
+    </button>
+    <div class="dropdown-content">
+        {{ content | safe }}
+    </div>
+</div>
+{% endmacro %}

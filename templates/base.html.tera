@@ -14,13 +14,24 @@
         <div class="content-wrapper">
             <div class="split left">
                 <h2>Content</h2>
-                <div id="file-structure"></div>
+                {{tableOfContent | safe}}
             </div>
 
             <div class="split right", id="content">
                 {{content | safe}}
             </div>
+            <script>
+                document.querySelectorAll('.dropdown-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const content = button.nextElementSibling;
+                        const chevron = button.querySelector('.chevron');
+
+                        content.classList.toggle('show');
+                        chevron.classList.toggle('up');
+                        chevron.classList.toggle('down');
+                    });
+                });
+            </script>
         </div>
-        <!-- TODO: Create Script to generate Table of content -->
     </body>
 </html>

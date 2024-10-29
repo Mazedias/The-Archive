@@ -55,7 +55,7 @@ h2 {
 }
 
 .left {
-    width: 15%;
+    width: 20%;
     background-color: #222;
     color: white;
     padding: 10px;
@@ -63,7 +63,7 @@ h2 {
 }
 
 .right {
-    width: 85%;
+    width: 80%;
     background-color: #333;
     color: white;
     padding: 50px;
@@ -83,4 +83,49 @@ h2 {
 
 .right a:visited {
     color: #a160ae;
+}
+
+
+.dropdown-container {
+    width: 100%;
+    margin: 10px;
+}
+
+.dropdown-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-content {
+    display: none;
+    padding-left: 20px;
+    overflow: hidden;
+    transition: max-heigt 0.3s ease-out;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.chevron {
+    border: solid #666;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transition: transfrom 0.3s;
+}
+
+.chevron.down {
+    transform: rotate(45deg);
+}
+
+.chevron.up {
+    transform: rotate(-135deg);
 }
