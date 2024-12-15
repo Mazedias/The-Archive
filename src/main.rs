@@ -1,15 +1,14 @@
 #[macro_use] extern crate rocket;
 
 use file_manager::{file_structure::generate_file_structure, updater::{update_files, UpdateStatus}};
+use html_generator::html_generator::{build_html_structure, markdown_to_html};
 use rocket::{fs::{relative, FileServer}, State};
-use rocket::serde::json::Json;
 use rocket_dyn_templates::{Template, context};
-use pulldown_cmark::{Parser, Options, html};
-use serde_json::{json, Value};
 use tokio::sync::RwLock;
-use std::{env, fs, sync::Arc, time::Duration};
+use std::{env, path::PathBuf, sync::Arc, time::Duration};
 
 mod file_manager;
+mod html_generator;
 
 #[derive(Clone)]
 struct UpdateState {
@@ -31,44 +30,31 @@ async fn index(update_state: &State<SharedUpdateState>) -> Template {
 
     if is_updating {
         return Template::render("base", context! {
-            content: get_markdown("messages/Updating"),
+            content: markdown_to_html("content/messages/Updating"),
         })
     }
 
+    // Try to retrieve file structre, if not possible return an error screen
     let file_structure = match generate_file_structure("content/repo") {
         Ok(value) => value,
-        Err(_) => json!(""),
+        Err(_) => return Template::render("base", context! {content: "Error occured while loading files!".to_string()}),
     };
 
-    Template::render("base", context! { files: file_structure, content: get_markdown("messages/TheArchive") })
+    // Translate file_structure to vector of Json objects (serde_json::Value) to be able to parse it into context macro
+    let file_structure: String = file_structure
+        .iter()
+        .map(|entry| build_html_structure(&entry))
+        .collect::<Vec<String>>()
+        .join("\n");
+
+    Template::render("base", context! { table_of_content: file_structure, content: markdown_to_html("content/messages/TheArchive") })
 }
 
 
-#[get("/file_structure")]
-fn get_file_structure() -> Json<Value> {
-    let json = match generate_file_structure("content/repo") {
-        Ok(value) => value,
-        Err(_) => json!({ "error": "Could not generate file structure!" })
-    };
-
-    Json(json)
-}
-
-
-#[get("/<file>")]
-fn get_markdown(file: &str) -> String {
-    let path = format!("content/{}.md", file);
-    let markdown = fs::read_to_string(path).unwrap_or_else(|_| "# 404\n\nFile not found.".to_string());
-
-    let mut options = Options::empty();
-    options.insert(Options::ENABLE_STRIKETHROUGH);
-
-    let parser = Parser::new_ext(&markdown, options);
-
-    let mut html_output = String::new();
-    html::push_html(&mut html_output, parser);
-
-    html_output
+#[get("/loadFile/<file..>")]
+fn get_markdown(file: PathBuf) -> String {
+    let file_path = file.to_str().unwrap_or_default();
+    markdown_to_html(file_path)
 }
 
 
@@ -113,7 +99,7 @@ fn rocket() -> _ {
     }
 
     rocket::build()
-        .mount("/", routes![index, get_markdown, get_file_structure])
+        .mount("/", routes![index, get_markdown])
         .mount("/static", FileServer::from(relative!("static")))
         .attach(Template::fairing())
         .manage(update_state)

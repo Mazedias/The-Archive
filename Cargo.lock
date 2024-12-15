@@ -1805,6 +1805,7 @@ dependencies = [
  "pulldown-cmark",
  "rocket",
  "rocket_dyn_templates",
+ "serde",
  "serde_json",
  "tokio",
 ]

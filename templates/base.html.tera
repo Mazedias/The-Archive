@@ -14,13 +14,14 @@
         <div class="content-wrapper">
             <div class="split left">
                 <h2>Content</h2>
-                {{tableOfContent | safe}}
+                {{table_of_content | safe}}
             </div>
 
             <div class="split right", id="content">
                 {{content | safe}}
             </div>
             <script>
+                // Handle dropdown menu closing/opening
                 document.querySelectorAll('.dropdown-button').forEach(button => {
                     button.addEventListener('click', () => {
                         const content = button.nextElementSibling;
@@ -31,6 +32,28 @@
                         chevron.classList.toggle('down');
                     });
                 });
+                
+                // Handle loading new content/file
+                function loadContent(path) {
+                    const cleanPath = path.replace(/\.md$/, '');
+
+                    console.log("THIS IS THE CLEAN PAHT:", cleanPath);
+
+                    document.querySelectorAll('.file-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    event.currentTarget.classList.add('active');
+
+                    fetch(`/loadFile/${cleanPath}`)
+                        .then(response => response.text())
+                        .then(content => {
+                            document.getElementById('content').innerHTML = content;
+                        })
+                        .catch(error => {
+                            console.error('Error loading content: ', error);
+                            document.getElementById('content').innerHTML = "<h1>Error<\h1><p>Failed to load content<\p>";
+                        });
+                }
             </script>
         </div>
     </body>

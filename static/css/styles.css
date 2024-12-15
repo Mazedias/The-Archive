@@ -129,3 +129,37 @@ h2 {
 .chevron.up {
     transform: rotate(-135deg);
 }
+
+.file-container {
+    width: 100%;
+    margin: 10px;
+}
+
+.file-link {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    text-align: left;
+}
+
+.file-link:hover {
+    background-color: #f8f8f8;
+}
+
+.file-icon {
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+/* Active state for the currently selected file */
+.file-link.active {
+    background-color: #e6e6e6;
+    border-color: #999;
+}
