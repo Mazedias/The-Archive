@@ -94,10 +94,13 @@ h2 {
 .dropdown-button {
     width: 100%;
     padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    border-left: 2px solid #575757;
     cursor: pointer;
     text-align: left;
+    font-size: 1.05em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -105,7 +108,7 @@ h2 {
 
 .dropdown-content {
     display: none;
-    padding-left: 20px;
+    padding-left: 8px;
     overflow: hidden;
     transition: max-heigt 0.3s ease-out;
 }
@@ -114,32 +117,19 @@ h2 {
     display: block;
 }
 
-.chevron {
-    border: solid #666;
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 3px;
-    transition: transfrom 0.3s;
-}
-
-.chevron.down {
-    transform: rotate(45deg);
-}
-
-.chevron.up {
-    transform: rotate(-135deg);
-}
-
 .file-container {
     width: 100%;
     margin: 10px;
+    background-color: transparent;
+    border: none;
 }
 
 .file-link {
     width: 100%;
     padding: 10px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #575757;
     text-decoration: none;
     color: inherit;
     display: flex;
@@ -150,16 +140,17 @@ h2 {
 }
 
 .file-link:hover {
-    background-color: #f8f8f8;
+    background-color: #575757;
+}
+
+/* Active state for the currently selected file */
+.file-link.active {
+    background-color: #434343;
+    border-bottom: 1px solid;
+    border-color: #575757;
 }
 
 .file-icon {
     margin-right: 10px;
     opacity: 0.6;
-}
-
-/* Active state for the currently selected file */
-.file-link.active {
-    background-color: #e6e6e6;
-    border-color: #999;
 }

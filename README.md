@@ -4,7 +4,7 @@ as read-only.
 
 ### Features
 - [x] Rendering Markdown files
-- [ ] Displaying a overview of available files
+- [x] Displaying a overview of available files
 - [ ] Dynamic configuration of which files shall be displayed
 - [ ] Connecting a Git Repository as source for the Markdown file structure
 

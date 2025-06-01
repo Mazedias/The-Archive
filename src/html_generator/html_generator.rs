@@ -44,7 +44,7 @@ pub fn build_html_structure(entry: &FileEntry) -> String {
                 r#"
                 <div class="file-container">
                     <button onclick="loadContent('{}')" class="file-link">
-                        <span class="file-icon">📄</span>
+                        <i class="fa-solid fa-file file-icon"></i>
                         {}
                     </button>
                 </div> 
